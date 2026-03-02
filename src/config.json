@@ -15,11 +15,11 @@
     "RM_IHPSG13_1P_512x64_c2_bm_bist": {
       "instances": {
         "sram0": {
-          "location": [40, 60],
+          "location": [40, 40],
           "orientation": "N"
         },
         "sram1": {
-          "location": [860, 60],
+          "location": [40, 280],
           "orientation": "N"
         }
       },
