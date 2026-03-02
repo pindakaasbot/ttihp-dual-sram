@@ -15,12 +15,12 @@
     "RM_IHPSG13_1P_512x32_c2_bm_bist": {
       "instances": {
         "sram0_32": {
-          "location": [50, 40],
-          "orientation": "N"
+          "location": [40, 40],
+          "orientation": "R90"
         },
         "sram1_32": {
-          "location": [50, 320],
-          "orientation": "N"
+          "location": [275, 40],
+          "orientation": "R90"
         }
       },
       "gds": [
@@ -53,12 +53,12 @@
     "RM_IHPSG13_1P_512x16_c2_bm_bist": {
       "instances": {
         "sram0_16": {
-          "location": [507, 40],
-          "orientation": "N"
+          "location": [510, 40],
+          "orientation": "R90"
         },
         "sram1_16": {
-          "location": [507, 320],
-          "orientation": "N"
+          "location": [510, 320],
+          "orientation": "R90"
         }
       },
       "gds": [
@@ -91,12 +91,12 @@
     "RM_IHPSG13_1P_512x8_c3_bm_bist": {
       "instances": {
         "sram0_8": {
-          "location": [784, 40],
-          "orientation": "N"
+          "location": [745, 40],
+          "orientation": "R90"
         },
         "sram1_8": {
-          "location": [784, 320],
-          "orientation": "N"
+          "location": [745, 320],
+          "orientation": "R90"
         }
       },
       "gds": [
