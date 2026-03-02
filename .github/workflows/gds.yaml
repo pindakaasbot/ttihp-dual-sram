@@ -18,6 +18,8 @@ jobs:
         with:
           pdk: ihp-sg13g2
           librelane-version: 3.0.0.dev52
+          tools-repo: pindakaasbot/tt-support-tools
+          tools-ref: main
 
   precheck:
     needs: gds
