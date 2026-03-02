@@ -9,9 +9,7 @@ SRC_DIR = $(PWD)/../src
 PROJECT_SOURCES = project.v
 
 SRAM_MODELS = models/RM_IHPSG13_1P_core_behavioral_bm_bist.v \
-              models/RM_IHPSG13_1P_512x32_c2_bm_bist.v \
-              models/RM_IHPSG13_1P_512x16_c2_bm_bist.v \
-              models/RM_IHPSG13_1P_512x8_c3_bm_bist.v
+              models/RM_IHPSG13_1P_512x64_c2_bm_bist.v
 
 ifneq ($(GATES),yes)
 

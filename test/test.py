@@ -25,7 +25,7 @@ async def write_byte(dut, addr_low, data):
 
 
 async def read_byte(dut, addr_low):
-    """Read a byte at addr_low (using current config for addr_high/byte_sel/mem_sel).
+    """Read a byte at addr_low (using current config).
     Returns the read value."""
     dut.ui_in.value = addr_low & 0x3F
     dut.uio_in.value = 0
@@ -54,95 +54,53 @@ async def test_dual_sram(dut):
     # All bidirectional ports should be inputs
     assert int(dut.uio_oe.value) == 0
 
-    # --- Test memory 0, byte 0 (from 512x32, lowest byte) ---
-    dut._log.info("mem0, byte 0: write/read")
-    await set_config(dut, addr_high=0, byte_sel=0, mem_sel=0)
+    # --- Test all 8 byte lanes in memory 0 ---
+    for byte_idx in range(8):
+        dut._log.info(f"mem0, byte {byte_idx}: write/read")
+        await set_config(dut, addr_high=0, byte_sel=byte_idx, mem_sel=0)
+        test_val = 0x10 + byte_idx
+        await write_byte(dut, 8, test_val)
+        val = await read_byte(dut, 8)
+        assert val == test_val, f"byte {byte_idx}: Expected 0x{test_val:02x}, got 0x{val:02x}"
 
-    await write_byte(dut, 8, 0x55)
-    await write_byte(dut, 9, 0x66)
-
-    val = await read_byte(dut, 8)
-    assert val == 0x55, f"Expected 0x55, got 0x{val:02x}"
-    val = await read_byte(dut, 9)
-    assert val == 0x66, f"Expected 0x66, got 0x{val:02x}"
-
-    # --- Test memory 0, byte 3 (from 512x32, highest byte) ---
-    dut._log.info("mem0, byte 3: write/read")
-    await set_config(dut, addr_high=0, byte_sel=3, mem_sel=0)
-
-    await write_byte(dut, 8, 0xAA)
-    val = await read_byte(dut, 8)
-    assert val == 0xAA, f"Expected 0xAA, got 0x{val:02x}"
-
-    # --- Test memory 0, byte 4 (from 512x16, low byte) ---
-    dut._log.info("mem0, byte 4: write/read")
-    await set_config(dut, addr_high=0, byte_sel=4, mem_sel=0)
-
-    await write_byte(dut, 8, 0xBB)
-    val = await read_byte(dut, 8)
-    assert val == 0xBB, f"Expected 0xBB, got 0x{val:02x}"
-
-    # --- Test memory 0, byte 5 (from 512x16, high byte) ---
-    dut._log.info("mem0, byte 5: write/read")
-    await set_config(dut, addr_high=0, byte_sel=5, mem_sel=0)
-
-    await write_byte(dut, 8, 0xCC)
-    val = await read_byte(dut, 8)
-    assert val == 0xCC, f"Expected 0xCC, got 0x{val:02x}"
-
-    # --- Test memory 0, byte 6 (from 512x8) ---
-    dut._log.info("mem0, byte 6: write/read")
-    await set_config(dut, addr_high=0, byte_sel=6, mem_sel=0)
-
-    await write_byte(dut, 8, 0xDD)
-    val = await read_byte(dut, 8)
-    assert val == 0xDD, f"Expected 0xDD, got 0x{val:02x}"
-
-    # --- Verify earlier bytes are still intact ---
-    dut._log.info("verify byte 0 at addr 8 is still 0x55")
-    await set_config(dut, addr_high=0, byte_sel=0, mem_sel=0)
-    val = await read_byte(dut, 8)
-    assert val == 0x55, f"Expected 0x55, got 0x{val:02x}"
+    # --- Verify all bytes are still intact ---
+    dut._log.info("verify all bytes at addr 8")
+    for byte_idx in range(8):
+        await set_config(dut, addr_high=0, byte_sel=byte_idx, mem_sel=0)
+        val = await read_byte(dut, 8)
+        expected = 0x10 + byte_idx
+        assert val == expected, f"byte {byte_idx}: Expected 0x{expected:02x}, got 0x{val:02x}"
 
     # --- Test memory 1 ---
-    dut._log.info("mem1, byte 0: write/read")
+    dut._log.info("mem1: write/read bytes 0 and 7")
     await set_config(dut, addr_high=0, byte_sel=0, mem_sel=1)
-
-    await write_byte(dut, 8, 0x11)
-    await write_byte(dut, 9, 0x22)
-
+    await write_byte(dut, 8, 0xA0)
     val = await read_byte(dut, 8)
-    assert val == 0x11, f"Expected 0x11, got 0x{val:02x}"
-    val = await read_byte(dut, 9)
-    assert val == 0x22, f"Expected 0x22, got 0x{val:02x}"
+    assert val == 0xA0, f"Expected 0xA0, got 0x{val:02x}"
 
-    # --- Test memory 1, byte 6 ---
-    dut._log.info("mem1, byte 6: write/read")
-    await set_config(dut, addr_high=0, byte_sel=6, mem_sel=1)
-
-    await write_byte(dut, 8, 0x33)
+    await set_config(dut, addr_high=0, byte_sel=7, mem_sel=1)
+    await write_byte(dut, 8, 0xA7)
     val = await read_byte(dut, 8)
-    assert val == 0x33, f"Expected 0x33, got 0x{val:02x}"
+    assert val == 0xA7, f"Expected 0xA7, got 0x{val:02x}"
 
-    # --- Verify memory 0 is not affected by memory 1 writes ---
+    # --- Verify memory 0 not affected ---
     dut._log.info("verify mem0 byte 0 addr 8 unchanged")
     await set_config(dut, addr_high=0, byte_sel=0, mem_sel=0)
     val = await read_byte(dut, 8)
-    assert val == 0x55, f"Expected 0x55, got 0x{val:02x}"
+    assert val == 0x10, f"Expected 0x10, got 0x{val:02x}"
 
     # --- Test bank switching (addr_high) ---
-    dut._log.info("test bank switching: write to bank 3")
-    await set_config(dut, addr_high=3, byte_sel=0, mem_sel=0)
-
+    dut._log.info("test bank switching: write to bank 5")
+    await set_config(dut, addr_high=5, byte_sel=0, mem_sel=0)
     await write_byte(dut, 10, 0xEE)
     val = await read_byte(dut, 10)
     assert val == 0xEE, f"Expected 0xEE, got 0x{val:02x}"
 
-    # Switch back to bank 0 and verify byte unchanged
+    # Switch back to bank 0 and verify byte 0 unchanged
     dut._log.info("switch back to bank 0, verify addr 8")
     await set_config(dut, addr_high=0, byte_sel=0, mem_sel=0)
     val = await read_byte(dut, 8)
-    assert val == 0x55, f"Expected 0x55, got 0x{val:02x}"
+    assert val == 0x10, f"Expected 0x10, got 0x{val:02x}"
 
     # --- Test overwrite ---
     dut._log.info("test overwrite at mem0 byte 0 addr 8")
@@ -152,11 +110,9 @@ async def test_dual_sram(dut):
 
     # --- Test write blocked during bank_select ---
     dut._log.info("verify writes blocked during bank_select")
-    # Try to write while bank_select is high (targeting mem0/byte0/addr_high=0)
     dut.ui_in.value = WE | BANKSEL | 8
     dut.uio_in.value = 0x00  # cfg: addr_high=0, byte_sel=0, mem_sel=0
     await ClockCycles(dut.clk, 1)
-    # Read back — should still be 0x99 (write_active is blocked when bank_select=1)
     val = await read_byte(dut, 8)
     assert val == 0x99, f"Expected 0x99 (write should be blocked), got 0x{val:02x}"
 

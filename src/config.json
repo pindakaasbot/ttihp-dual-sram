@@ -1,5 +1,5 @@
 {
-  "//": "Dual 512x56 SRAM test — six SRAM macros (two memories × three macros each)",
+  "//": "Dual 512x64 SRAM test — two RM_IHPSG13_1P_512x64_c2_bm_bist macros",
 
   "PL_TARGET_DENSITY_PCT": 60,
   "CLOCK_PERIOD": 20,
@@ -10,136 +10,52 @@
   "LINTER_INCLUDE_PDK_MODELS": 1,
   "CLOCK_PORT": "clk",
 
-  "//": "SRAM macro integration — 3 macro types, 6 instances total",
+  "//": "SRAM macro integration — 2 instances of 512x64",
   "MACROS": {
-    "RM_IHPSG13_1P_512x32_c2_bm_bist": {
+    "RM_IHPSG13_1P_512x64_c2_bm_bist": {
       "instances": {
-        "sram0_32": {
+        "sram0": {
           "location": [40, 60],
           "orientation": "N"
         },
-        "sram1_32": {
-          "location": [740, 60],
+        "sram1": {
+          "location": [860, 60],
           "orientation": "N"
         }
       },
       "gds": [
-        "dir::../macro/RM_IHPSG13_1P_512x32_c2_bm_bist/RM_IHPSG13_1P_512x32_c2_bm_bist.gds"
+        "dir::../macro/RM_IHPSG13_1P_512x64_c2_bm_bist/RM_IHPSG13_1P_512x64_c2_bm_bist.gds"
       ],
       "lef": [
-        "dir::../macro/RM_IHPSG13_1P_512x32_c2_bm_bist/RM_IHPSG13_1P_512x32_c2_bm_bist.lef"
+        "dir::../macro/RM_IHPSG13_1P_512x64_c2_bm_bist/RM_IHPSG13_1P_512x64_c2_bm_bist.lef"
       ],
       "lib": {
         "nom_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x32_c2_bm_bist/RM_IHPSG13_1P_512x32_c2_bm_bist_typ_1p20V_25C.lib"
+          "dir::../macro/RM_IHPSG13_1P_512x64_c2_bm_bist/RM_IHPSG13_1P_512x64_c2_bm_bist_typ_1p20V_25C.lib"
         ],
         "min_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x32_c2_bm_bist/RM_IHPSG13_1P_512x32_c2_bm_bist_fast_1p32V_m55C.lib"
+          "dir::../macro/RM_IHPSG13_1P_512x64_c2_bm_bist/RM_IHPSG13_1P_512x64_c2_bm_bist_fast_1p32V_m55C.lib"
         ],
         "max_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x32_c2_bm_bist/RM_IHPSG13_1P_512x32_c2_bm_bist_slow_1p08V_125C.lib"
+          "dir::../macro/RM_IHPSG13_1P_512x64_c2_bm_bist/RM_IHPSG13_1P_512x64_c2_bm_bist_slow_1p08V_125C.lib"
         ],
         "*": [
-          "dir::../macro/RM_IHPSG13_1P_512x32_c2_bm_bist/RM_IHPSG13_1P_512x32_c2_bm_bist_typ_1p20V_25C.lib"
+          "dir::../macro/RM_IHPSG13_1P_512x64_c2_bm_bist/RM_IHPSG13_1P_512x64_c2_bm_bist_typ_1p20V_25C.lib"
         ]
       },
       "nl": [
-        "dir::./RM_IHPSG13_1P_512x32_c2_bm_bist.v"
+        "dir::./RM_IHPSG13_1P_512x64_c2_bm_bist.v"
       ],
       "spice": [
-        "dir::../macro/RM_IHPSG13_1P_512x32_c2_bm_bist/RM_IHPSG13_1P_512x32_c2_bm_bist.cdl"
-      ]
-    },
-    "RM_IHPSG13_1P_512x16_c2_bm_bist": {
-      "instances": {
-        "sram0_16": {
-          "location": [480, 5],
-          "orientation": "N"
-        },
-        "sram1_16": {
-          "location": [1180, 5],
-          "orientation": "N"
-        }
-      },
-      "gds": [
-        "dir::../macro/RM_IHPSG13_1P_512x16_c2_bm_bist/RM_IHPSG13_1P_512x16_c2_bm_bist.gds"
-      ],
-      "lef": [
-        "dir::../macro/RM_IHPSG13_1P_512x16_c2_bm_bist/RM_IHPSG13_1P_512x16_c2_bm_bist.lef"
-      ],
-      "lib": {
-        "nom_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x16_c2_bm_bist/RM_IHPSG13_1P_512x16_c2_bm_bist_typ_1p20V_25C.lib"
-        ],
-        "min_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x16_c2_bm_bist/RM_IHPSG13_1P_512x16_c2_bm_bist_fast_1p32V_m55C.lib"
-        ],
-        "max_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x16_c2_bm_bist/RM_IHPSG13_1P_512x16_c2_bm_bist_slow_1p08V_125C.lib"
-        ],
-        "*": [
-          "dir::../macro/RM_IHPSG13_1P_512x16_c2_bm_bist/RM_IHPSG13_1P_512x16_c2_bm_bist_typ_1p20V_25C.lib"
-        ]
-      },
-      "nl": [
-        "dir::./RM_IHPSG13_1P_512x16_c2_bm_bist.v"
-      ],
-      "spice": [
-        "dir::../macro/RM_IHPSG13_1P_512x16_c2_bm_bist/RM_IHPSG13_1P_512x16_c2_bm_bist.cdl"
-      ]
-    },
-    "RM_IHPSG13_1P_512x8_c3_bm_bist": {
-      "instances": {
-        "sram0_8": {
-          "location": [480, 200],
-          "orientation": "N"
-        },
-        "sram1_8": {
-          "location": [1180, 200],
-          "orientation": "N"
-        }
-      },
-      "gds": [
-        "dir::../macro/RM_IHPSG13_1P_512x8_c3_bm_bist/RM_IHPSG13_1P_512x8_c3_bm_bist.gds"
-      ],
-      "lef": [
-        "dir::../macro/RM_IHPSG13_1P_512x8_c3_bm_bist/RM_IHPSG13_1P_512x8_c3_bm_bist.lef"
-      ],
-      "lib": {
-        "nom_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x8_c3_bm_bist/RM_IHPSG13_1P_512x8_c3_bm_bist_typ_1p20V_25C.lib"
-        ],
-        "min_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x8_c3_bm_bist/RM_IHPSG13_1P_512x8_c3_bm_bist_fast_1p32V_m55C.lib"
-        ],
-        "max_*": [
-          "dir::../macro/RM_IHPSG13_1P_512x8_c3_bm_bist/RM_IHPSG13_1P_512x8_c3_bm_bist_slow_1p08V_125C.lib"
-        ],
-        "*": [
-          "dir::../macro/RM_IHPSG13_1P_512x8_c3_bm_bist/RM_IHPSG13_1P_512x8_c3_bm_bist_typ_1p20V_25C.lib"
-        ]
-      },
-      "nl": [
-        "dir::./RM_IHPSG13_1P_512x8_c3_bm_bist.v"
-      ],
-      "spice": [
-        "dir::../macro/RM_IHPSG13_1P_512x8_c3_bm_bist/RM_IHPSG13_1P_512x8_c3_bm_bist.cdl"
+        "dir::../macro/RM_IHPSG13_1P_512x64_c2_bm_bist/RM_IHPSG13_1P_512x64_c2_bm_bist.cdl"
       ]
     }
   },
   "PDN_MACRO_CONNECTIONS": [
-    "sram0_32 VPWR VGND VDD! VSS!",
-    "sram0_32 VPWR VGND VDDARRAY! VSS!",
-    "sram0_16 VPWR VGND VDD! VSS!",
-    "sram0_16 VPWR VGND VDDARRAY! VSS!",
-    "sram0_8 VPWR VGND VDD! VSS!",
-    "sram0_8 VPWR VGND VDDARRAY! VSS!",
-    "sram1_32 VPWR VGND VDD! VSS!",
-    "sram1_32 VPWR VGND VDDARRAY! VSS!",
-    "sram1_16 VPWR VGND VDD! VSS!",
-    "sram1_16 VPWR VGND VDDARRAY! VSS!",
-    "sram1_8 VPWR VGND VDD! VSS!",
-    "sram1_8 VPWR VGND VDDARRAY! VSS!"
+    "sram0 VPWR VGND VDD! VSS!",
+    "sram0 VPWR VGND VDDARRAY! VSS!",
+    "sram1 VPWR VGND VDD! VSS!",
+    "sram1 VPWR VGND VDDARRAY! VSS!"
   ],
 
   "//": "Custom PDN config: SRAM power pins are on Metal4, need Metal4↔TopMetal1 connection",

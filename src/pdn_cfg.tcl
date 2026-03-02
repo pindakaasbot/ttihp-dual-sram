@@ -1,6 +1,6 @@
 # Custom PDN configuration for SRAM macro integration
 #
-# The SRAM macros (512x32, 512x16, 512x8) have power pins
+# The SRAM macros (512x64) have power pins
 # (VDD!, VDDARRAY!, VSS!) on Metal4. The default macro PDN grid tries
 # to connect TopMetal1↔TopMetal2, which fails when FP_PDN_MULTILAYER=0
 # (no TopMetal2 stripes). This custom config connects Metal4↔TopMetal1

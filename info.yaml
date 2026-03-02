@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        "Dual SRAM (2×512×56) test"
+  title:        "Dual SRAM (2x512x64) test"
   author:       "Uri Shaked"
   discord:      "urish"
-  description:  "Tests two 512×56-bit SRAM memories (each from 512×32 + 512×16 + 512×8 macros)"
+  description:  "Tests two 512x64-bit SRAM memories using RM_IHPSG13_1P_512x64_c2_bm_bist macros"
   language:     "Verilog"
   clock_hz:     0
 
@@ -13,9 +13,7 @@ project:
 
   source_files:
     - "project.v"
-    - "RM_IHPSG13_1P_512x32_c2_bm_bist.v"
-    - "RM_IHPSG13_1P_512x16_c2_bm_bist.v"
-    - "RM_IHPSG13_1P_512x8_c3_bm_bist.v"
+    - "RM_IHPSG13_1P_512x64_c2_bm_bist.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 pinout:
