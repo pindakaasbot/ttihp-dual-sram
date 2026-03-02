@@ -1,0 +1,53 @@
+# Tiny Tapeout project information
+project:
+  title:        "Dual SRAM (2×512×56) test"
+  author:       "Uri Shaked"
+  discord:      "urish"
+  description:  "Tests two 512×56-bit SRAM memories (each from 512×32 + 512×16 + 512×8 macros)"
+  language:     "Verilog"
+  clock_hz:     0
+
+  tiles: "8x2"
+
+  top_module:  "tt_um_urish_sram_test"
+
+  source_files:
+    - "project.v"
+    - "RM_IHPSG13_1P_512x32_c2_bm_bist.v"
+    - "RM_IHPSG13_1P_512x16_c2_bm_bist.v"
+    - "RM_IHPSG13_1P_512x8_c3_bm_bist.v"
+
+# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
+pinout:
+  # Inputs
+  ui[0]: "addr[0]"
+  ui[1]: "addr[1]"
+  ui[2]: "addr[2]"
+  ui[3]: "addr[3]"
+  ui[4]: "addr[4]"
+  ui[5]: "addr[5]"
+  ui[6]: "bank_sel"
+  ui[7]: "wen"
+
+  # Outputs
+  uo[0]: "dout[0]"
+  uo[1]: "dout[1]"
+  uo[2]: "dout[2]"
+  uo[3]: "dout[3]"
+  uo[4]: "dout[4]"
+  uo[5]: "dout[5]"
+  uo[6]: "dout[6]"
+  uo[7]: "dout[7]"
+
+  # Bidirectional pins
+  uio[0]: "din[0]/cfg[0]"
+  uio[1]: "din[1]/cfg[1]"
+  uio[2]: "din[2]/cfg[2]"
+  uio[3]: "din[3]/cfg[3]"
+  uio[4]: "din[4]/cfg[4]"
+  uio[5]: "din[5]/cfg[5]"
+  uio[6]: "din[6]/cfg[6]"
+  uio[7]: "din[7]"
+
+# Do not change!
+yaml_version: 6
