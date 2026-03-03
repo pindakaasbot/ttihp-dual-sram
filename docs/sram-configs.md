@@ -281,7 +281,7 @@ Logic area: 924,478 um² (75.5% of die). Maximum space but largest tile.
 | ----------------- | ------------ | ---- | ----------- | -------- | -------- | ----------- | --------------------------------------- |
 | `dual-512x64-4x4` | B (2 macros) | 4x4  | N           | **PASS** | **PASS** | 64m         | Smallest working tile                   |
 | `dual-512x64`     | B (2 macros) | 8x2  | N           | **PASS** | **PASS** | 62m         | Digital tile option                     |
-| `dual-512x64-6x4` | B (2 macros) | 6x4  | N           | **PASS** | **PASS** | 36m         | Spacious option                         |
+| `dual-512x64-6x4` | B (2 macros) | 6x4  | N           | **PASS** | **PASS** | 33m         | PR boundary + blackbox DRC/LVS          |
 | `dual-512x64-8x4` | B (2 macros) | 8x4  | N           | **PASS** | **PASS** | 40m         | Maximum space (8x4 in fork)             |
 | `6macro-5x4`      | A (6 macros) | 5x4  | R90         | **PASS** | **PASS** | 45m         | Smallest for 6-macro                    |
 | `main`            | A (6 macros) | 6x4  | R90         | **PASS** | **PASS** | 32m         | Comfortable fit                         |
@@ -294,15 +294,54 @@ Precheck DRC failures are upstream IHP PDK issues (same as ttihp-sram-test).
 ### Build Optimization: SRAM Macro Blackboxing
 
 Hardening with SRAM macros was taking ~60 min due to Magic running DRC and LVS on
-SRAM internals (which always fail). The following config optimizations blackbox SRAM
-macros during signoff, reducing build time to ~30-40 min:
+SRAM internals (which always fail). Two optimization approaches were tested:
+
+#### Approach 1: Blackbox DRC/LVS only (main, 5x4, 8x4 branches)
+
+```json
+"MAGIC_MACRO_STD_CELL_SOURCE": "PDK",
+"MAGIC_DRC_USE_GDS": false,
+"MAGIC_EXT_ABSTRACT_CELLS": ["RM_IHPSG13_1P_.*"],
+```
+
+- `MAGIC_MACRO_STD_CELL_SOURCE: "PDK"`: Magic reads full SRAM GDS during GDS writing
+- `MAGIC_DRC_USE_GDS: false`: DRC runs on DEF/LEF view (macros are abstract boxes)
+- `MAGIC_EXT_ABSTRACT_CELLS`: Blackboxes SRAM cells during SPICE extraction for LVS
+- Result: ~32-40 min (down from ~60 min)
+
+#### Approach 2: PR boundary + blackbox DRC/LVS (dual-512x64-6x4)
+
+The SRAM GDS was patched to add a proper PR boundary rectangle (layer 189/4), enabling
+Magic's native blackbox mode during GDS writing:
 
 ```json
 "MAGIC_DRC_USE_GDS": false,
 "MAGIC_EXT_ABSTRACT_CELLS": ["RM_IHPSG13_1P_.*"],
 ```
 
-- `MAGIC_DRC_USE_GDS: false`: DRC runs on DEF/LEF view (macros are abstract boxes)
-- `MAGIC_EXT_ABSTRACT_CELLS`: Blackboxes SRAM cells during SPICE extraction for LVS
-- STA, IR drop, and hold/setup violation checks remain fully enabled
-- `MAGIC_MACRO_STD_CELL_SOURCE: "PDK"` still required for GDS generation (no PR boundary)
+No `MAGIC_MACRO_STD_CELL_SOURCE` needed — defaults to `"macro"` which uses the PR
+boundary to treat the SRAM as an opaque box during GDS stream-out.
+
+- Result: **33 min** (fastest, ~3 min faster than Approach 1)
+
+#### PR boundary alone (without blackbox DRC/LVS) — NOT recommended
+
+Testing with PR boundary but without `MAGIC_DRC_USE_GDS: false` showed **74 min** —
+*slower* than the original ~62 min. The bottleneck is `Magic.DRC`, which defaults to
+reading the full output GDS (`MAGIC_DRC_USE_GDS` defaults to `true`). The PR boundary
+only helps the GDS writing step, not DRC or LVS.
+
+#### Step-level timing analysis (dual-512x64-6x4)
+
+| Magic Step         | No optimization | PR boundary only | Combined (best) |
+| ------------------ | --------------- | ---------------- | --------------- |
+| Magic.StreamOut    | ~5 min          | 19 sec           | 19 sec          |
+| Magic.WriteLEF     | ~1 min          | 62 sec           | 61 sec          |
+| **Magic.DRC**      | **~30 min**     | **39 min 18 sec** | **1 min 56 sec** |
+| Magic.SpiceExtract | ~5 min          | 8 sec            | 8 sec           |
+| Netgen.LVS         | ~1 min          | ~1 sec           | ~1 sec          |
+
+Key insight: `MAGIC_DRC_USE_GDS: false` is the single most impactful setting, saving
+~37 min by running DRC on the abstract DEF/LEF view instead of parsing the full GDS.
+
+All approaches keep STA, IR drop, and hold/setup violation checks fully enabled.
