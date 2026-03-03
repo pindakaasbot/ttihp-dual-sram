@@ -64,15 +64,13 @@
   "//": "SRAM GDS has no PR boundary layer; read full GDS instead of blackbox",
   "MAGIC_MACRO_STD_CELL_SOURCE": "PDK",
 
-  "//": "Skip Magic DRC entirely — SRAM macro internals trigger massive violations",
-  "RUN_MAGIC_DRC": 0,
+  "//": "Run DRC on DEF view (abstract macros) instead of full GDS — skips SRAM internals",
+  "MAGIC_DRC_USE_GDS": false,
+  "ERROR_ON_MAGIC_DRC": false,
 
-  "//": "Skip LVS entirely — SRAM macro LVS is known to fail",
-  "RUN_LVS": 0,
-
-  "//": "Skip post-PNR STA and IR drop — not needed for iteration",
-  "RUN_MCSTA": 0,
-  "RUN_IRDROP_REPORT": 0,
+  "//": "Blackbox SRAM macros during SPICE extraction for LVS — skip SRAM transistors",
+  "MAGIC_EXT_ABSTRACT_CELLS": ["RM_IHPSG13_1P_.*"],
+  "ERROR_ON_LVS_ERROR": false,
 
   "//": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
   "//": "!!! DO NOT CHANGE ANYTHING BELOW THIS POINT !!!",
