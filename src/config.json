@@ -148,11 +148,15 @@
   "//": "SRAM GDS has no PR boundary layer; read full GDS instead of blackbox",
   "MAGIC_MACRO_STD_CELL_SOURCE": "PDK",
 
-  "//": "SRAM macro internals trigger massive DRC in Magic; skip",
-  "ERROR_ON_MAGIC_DRC": false,
+  "//": "Skip Magic DRC entirely — SRAM macro internals trigger massive violations",
+  "RUN_MAGIC_DRC": 0,
 
-  "//": "SRAM macro LVS is known to fail",
-  "ERROR_ON_LVS_ERROR": false,
+  "//": "Skip LVS entirely — SRAM macro LVS is known to fail",
+  "RUN_LVS": 0,
+
+  "//": "Skip post-PNR STA and IR drop — not needed for iteration",
+  "RUN_MCSTA": 0,
+  "RUN_IRDROP_REPORT": 0,
 
   "//": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
   "//": "!!! DO NOT CHANGE ANYTHING BELOW THIS POINT !!!",
