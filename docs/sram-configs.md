@@ -281,10 +281,28 @@ Logic area: 924,478 um² (75.5% of die). Maximum space but largest tile.
 | ----------------- | ------------ | ---- | ----------- | -------- | -------- | ----------- | --------------------------------------- |
 | `dual-512x64-4x4` | B (2 macros) | 4x4  | N           | **PASS** | **PASS** | 64m         | Smallest working tile                   |
 | `dual-512x64`     | B (2 macros) | 8x2  | N           | **PASS** | **PASS** | 62m         | Digital tile option                     |
-| `dual-512x64-6x4` | B (2 macros) | 6x4  | N           | pending  | —        | —           | Spacious option                         |
-| `dual-512x64-8x4` | B (2 macros) | 8x4  | N           | pending  | —        | —           | Maximum space                           |
+| `dual-512x64-6x4` | B (2 macros) | 6x4  | N           | **PASS** | **PASS** | 36m         | Spacious option                         |
+| `dual-512x64-8x4` | B (2 macros) | 8x4  | N           | **PASS** | **PASS** | 40m         | Maximum space (8x4 in fork)             |
 | `6macro-5x4`      | A (6 macros) | 5x4  | R90         | **PASS** | **PASS** | 45m         | Smallest for 6-macro                    |
-| `main`            | A (6 macros) | 6x4  | R90         | **PASS** | **PASS** | 57m         | Comfortable fit                         |
+| `main`            | A (6 macros) | 6x4  | R90         | **PASS** | **PASS** | 32m         | Comfortable fit                         |
 | `6macro-4x4`      | A (6 macros) | 4x4  | R90         | **FAIL** | —        | 6m          | PDN-0179: right margin too tight (19um) |
 
+8x4 tile requires `pindakaasbot/tt-support-tools` fork (adds 8x4 DEF template + tile_sizes entry).
+
 Precheck DRC failures are upstream IHP PDK issues (same as ttihp-sram-test).
+
+### Build Optimization: SRAM Macro Blackboxing
+
+Hardening with SRAM macros was taking ~60 min due to Magic running DRC and LVS on
+SRAM internals (which always fail). The following config optimizations blackbox SRAM
+macros during signoff, reducing build time to ~30-40 min:
+
+```json
+"MAGIC_DRC_USE_GDS": false,
+"MAGIC_EXT_ABSTRACT_CELLS": ["RM_IHPSG13_1P_.*"],
+```
+
+- `MAGIC_DRC_USE_GDS: false`: DRC runs on DEF/LEF view (macros are abstract boxes)
+- `MAGIC_EXT_ABSTRACT_CELLS`: Blackboxes SRAM cells during SPICE extraction for LVS
+- STA, IR drop, and hold/setup violation checks remain fully enabled
+- `MAGIC_MACRO_STD_CELL_SOURCE: "PDK"` still required for GDS generation (no PR boundary)
