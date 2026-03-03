@@ -61,15 +61,11 @@
   "//": "Custom PDN config: SRAM power pins are on Metal4, need Metal4↔TopMetal1 connection",
   "PDN_CFG": "dir::pdn_cfg.tcl",
 
-  "//": "SRAM GDS has no PR boundary layer; read full GDS instead of blackbox",
-  "MAGIC_MACRO_STD_CELL_SOURCE": "PDK",
+  "//": "SRAM GDS patched with PR boundary (layer 189/4) — enables blackbox mode",
+  "//": "Blackbox mode: Magic treats SRAM as opaque box, skipping internal parsing",
 
-  "//": "Run DRC on DEF view (abstract macros) instead of full GDS — skips SRAM internals",
-  "MAGIC_DRC_USE_GDS": false,
+  "//": "SRAM macro DRC/LVS errors are expected at the boundary — don't fail the build",
   "ERROR_ON_MAGIC_DRC": false,
-
-  "//": "Blackbox SRAM macros during SPICE extraction for LVS — skip SRAM transistors",
-  "MAGIC_EXT_ABSTRACT_CELLS": ["RM_IHPSG13_1P_.*"],
   "ERROR_ON_LVS_ERROR": false,
 
   "//": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
