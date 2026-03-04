@@ -97,10 +97,7 @@
 
   "//": "Save some time",
   "RUN_KLAYOUT_XOR": 0,
-  "RUN_KLAYOUT_DRC": 1,
-  "//": "Disable FEOL checks — SRAM macro internals trigger Sdiod/Cnt violations",
-  "//": "IHP DRC deck uses $no_feol variable (not $feol)",
-  "KLAYOUT_DRC_OPTIONS": {"no_feol": true},
+  "RUN_KLAYOUT_DRC": 0,
 
   "//": "Don't put clock buffers on the outputs",
   "DESIGN_REPAIR_BUFFER_OUTPUT_PORTS": 0,
